@@ -1,7 +1,0 @@
-package webshop;
-
-import java.lang.Object;
-
-public class Util@A {
-    public static <S@A> S@A downcast(Object@A value){}
-}

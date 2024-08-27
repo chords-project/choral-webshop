@@ -1,5 +1,6 @@
 src/main/java/webshop/Webshop_*.java
 src/main/java/webshop/cart/*.java
+src/main/java/webshop/cart/messages/*.java
 src/main/java/webshop/frontend/*.java
 
 target/

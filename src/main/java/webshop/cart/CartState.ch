@@ -19,4 +19,12 @@ public class CartState@A {
         userItems.add(item);
         this.userItems.put(userID, userItems);
     }
+
+    public List@A<CartItem> getUserCart(String@A userID) {
+        return this.userItems.get(userID);
+    }
+
+    public void emptyCart(String@A userID) {
+        userItems.remove(userID);
+    }
 }
