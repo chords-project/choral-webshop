@@ -11,10 +11,10 @@ import webshop.cart.messages.GetCartReq;
 import webshop.cart.messages.GetCartRes;
 
 public class CartService@(Cart, Client) {
-    private SymChannel@(Cart, Client)<CartMessage> ch;
+    private SymChannel@(Cart, Client)<Object> ch;
     private CartState@Cart state;
 
-    public CartService(SymChannel@(Cart, Client)<CartMessage> ch) {
+    public CartService(SymChannel@(Cart, Client)<Object> ch) {
         this.ch = ch;
         this.state = new CartState@Cart();
     }

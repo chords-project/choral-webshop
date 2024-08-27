@@ -19,4 +19,4 @@ clean:
 	rm -rf $(patsubst %.ch,%.java,$(CHORAL_SRCS)) $(patsubst %.ch,%_*.java,$(CHORAL_SRCS)) 
 
 %.java: %.ch
-	choral epp -s $(@D) -t src/main/java -l headers $(notdir $*)
+	choral epp -s src/main/java -t src/main/java -l headers $(notdir $*)

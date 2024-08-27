@@ -21,7 +21,13 @@ public class CartState@A {
     }
 
     public List@A<CartItem> getUserCart(String@A userID) {
-        return this.userItems.get(userID);
+        List@A<CartItem> items = this.userItems.get(userID);
+        if (items == null@A) {
+            items = new ArrayList@A<CartItem>();
+            this.userItems.put(userID, items);
+        }
+
+        return items;
     }
 
     public void emptyCart(String@A userID) {

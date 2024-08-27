@@ -1,21 +1,30 @@
 package webshop;
 
-import webshop.frontend.FrontendState;
-import webshop.cart.CartState;
+import webshop.checkout.CheckoutService;
+import webshop.checkout.messages.PlaceOrderReq;
+import webshop.checkout.messages.PlaceOrderRes;
 
 // Does not seem possible to "implement Runnable@(Frontend, Cart)" ??
 
-class Webshop@(Frontend, Cart) {
-    private FrontendState@Frontend frontendState;
-    private CartState@Cart cartState;
+class Webshop@(Frontend, Cart, Checkout) {
+    private CheckoutService@(Frontend, Cart, Checkout) checkoutService;
 
-    public Webshop(FrontendState@Frontend frontendState, CartState@Cart cartState) {
-        this.frontendState = frontendState;
-        this.cartState = cartState;
+    public Webshop(CheckoutService@(Frontend, Cart, Checkout) checkoutService) {
+        this.checkoutService = checkoutService;
     }
 
     public void run() {
-        System@Frontend.out.println("Frontend service started"@Frontend);
-        System@Cart.out.println("Cart service started"@Cart);
+        System@Frontend.out.println("FRONTEND: started"@Frontend);
+        System@Cart.out.println("CART: started"@Cart);
+        System@Checkout.out.println("CHECKOUT: started"@Checkout);
+
+        PlaceOrderReq@Frontend req = new PlaceOrderReq@Frontend("1000"@Frontend, "USD"@Frontend, "Campusvej 55"@Frontend, "test@example.com"@Frontend, "555-444-333-222"@Frontend);
+        PlaceOrderRes@Frontend res = checkoutService.placeOrder(req);
+
+        System@Frontend.out.println("FRONTEND: Order placed for items: "@Frontend + res.items);
+
+        System@Frontend.out.println("FRONTEND: done"@Frontend);
+        System@Cart.out.println("CART: done"@Cart);
+        System@Checkout.out.println("CHECKOUT: done"@Checkout);
     }
 }

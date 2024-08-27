@@ -2,24 +2,48 @@ package webshop;
 
 import java.util.List;
 
-import webshop.cart.CartItem;
-import webshop.cart.CartState;
-import webshop.frontend.FrontendState;
+import choral.runtime.LocalChannel.LocalChannel_A;
+import choral.runtime.LocalChannel.LocalChannel_B;
+import choral.runtime.Media.MessageQueue;
+import choral.utils.Pair;
+import webshop.cart.CartService_Cart;
+import webshop.cart.CartService_Client;
+import webshop.checkout.CheckoutService_Cart;
+import webshop.checkout.CheckoutService_Checkout;
+import webshop.checkout.CheckoutService_Client;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
 
-        FrontendState frontend = new FrontendState("100");
+        Pair<LocalChannel_A, LocalChannel_B> ch_CartCheckout = makeChannel();
 
-        CartState cart = new CartState();
-        cart.addItem(frontend.userID(), new CartItem("t-shirt", 3));
-        cart.addItem(frontend.userID(), new CartItem("sunglasses", 1));
+        CartService_Cart cartServiceCart = new CartService_Cart(ch_CartCheckout.left());
+        CartService_Client cartServiceCheckout = new CartService_Client(ch_CartCheckout.right());
 
-        Webshop_Frontend frontendService = new Webshop_Frontend(frontend);
-        Webshop_Cart cartService = new Webshop_Cart(cart);
+        Pair<LocalChannel_A, LocalChannel_B> ch_CheckoutClient = makeChannel();
 
-        List<Runnable> services = List.of(() -> frontendService.run(), () -> cartService.run());
+        CheckoutService_Client checkoutFrontend = new CheckoutService_Client(ch_CheckoutClient.left());
+        CheckoutService_Cart checkoutCart = new CheckoutService_Cart(cartServiceCart);
+        CheckoutService_Checkout checkoutService = new CheckoutService_Checkout(
+                ch_CheckoutClient.right(), cartServiceCheckout);
+
+        Webshop_Frontend webshopFrontend = new Webshop_Frontend(checkoutFrontend);
+        Webshop_Cart webshopCart = new Webshop_Cart(checkoutCart);
+        Webshop_Checkout webshopCheckout = new Webshop_Checkout(checkoutService);
+
+        List<Runnable> services = List.of(
+                () -> webshopFrontend.run(),
+                () -> webshopCart.run(),
+                () -> webshopCheckout.run());
+
         services.parallelStream().forEach(Runnable::run);
+    }
+
+    public static Pair<LocalChannel_A, LocalChannel_B> makeChannel() {
+        MessageQueue msqA = new MessageQueue();
+        MessageQueue msqB = new MessageQueue();
+
+        return new Pair<LocalChannel_A, LocalChannel_B>(
+                new LocalChannel_A(msqA, msqB), new LocalChannel_B(msqB, msqA));
     }
 }
