@@ -1,6 +1,5 @@
 package webshop;
 
-import java.lang.Runnable;
 import webshop.frontend.FrontendState;
 import webshop.cart.CartState;
 

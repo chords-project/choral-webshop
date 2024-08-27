@@ -1,0 +1,21 @@
+package webshop.channel;
+
+import choral.channels.SymChannel;
+
+public class RpcChannel@(A, B)<Message@X> implements SymChannel@(A, B)<Message> {
+    public <M@X extends Message@X> M@B com(M@A m) {}
+
+    public <M@X extends Message@X> M@A com(M@B m) {}
+
+    @SelectionMethod
+    public <Message@X extends Enum@X<Message>> Message@B select(Message@A m) {}
+
+    @SelectionMethod
+    public <Message@X extends Enum@X<Message>> Message@A select(Message@B m) {}
+
+    @TypeSelectionMethod
+    public <M@X extends Message@X> M@B tselect(M@A m) {}
+
+    @TypeSelectionMethod
+    public <M@X extends Message@X> M@A tselect(M@B m) {}
+}

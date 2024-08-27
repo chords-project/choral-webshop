@@ -1,6 +1,6 @@
 package webshop.cart;
 
-public class CartItem@A {
+public final class CartItem@A {
     private final String@A productID;
     private final int@A quantity;
 
