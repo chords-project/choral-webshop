@@ -1,9 +1,9 @@
-src/main/java/webshop/Webshop_*.java
-src/main/java/webshop/cart/*.java
-src/main/java/webshop/cart/messages/*.java
-src/main/java/webshop/frontend/*.java
-src/main/java/webshop/checkout/*.java
-src/main/java/webshop/checkout/messages/*.java
+src/main/java/webshop/orchestrated/Webshop_*.java
+src/main/java/webshop/orchestrated/cart/*.java
+src/main/java/webshop/orchestrated/cart/messages/*.java
+src/main/java/webshop/orchestrated/frontend/*.java
+src/main/java/webshop/orchestrated/checkout/*.java
+src/main/java/webshop/orchestrated/checkout/messages/*.java
 
 target/
 pom.xml.tag
