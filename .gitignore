@@ -5,6 +5,9 @@ src/main/java/webshop/orchestrated/frontend/*.java
 src/main/java/webshop/orchestrated/checkout/*.java
 src/main/java/webshop/orchestrated/checkout/messages/*.java
 
+src/main/java/webshop/choreographic/*.java
+!src/main/java/webshop/choreographic/Main.java
+
 target/
 pom.xml.tag
 pom.xml.releaseBackup
