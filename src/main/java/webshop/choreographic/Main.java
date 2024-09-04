@@ -16,11 +16,16 @@ public class Main {
         Pair<LocalChannel_A, LocalChannel_B> ch_CartBilling = makeChannel();
         Pair<LocalChannel_A, LocalChannel_B> ch_BillingShipping = makeChannel();
 
-        Choreography_Client client = new Choreography_Client(ch_ClientCart.left(), ch_ClientShipping.left());
-        Choreography_Cart cart = new Choreography_Cart(ch_ClientCart.right(), ch_CartBilling.left());
-        Choreography_Billing billing = new Choreography_Billing(ch_CartBilling.right(), ch_BillingShipping.left());
-        Choreography_Shipping shipping = new Choreography_Shipping(ch_ClientShipping.right(),
-                ch_BillingShipping.right());
+        CartState cartState = new CartState();
+        cartState.addItem("1000", new CartItem("product1", 1));
+
+        Choreography_Client client = new Choreography_Client(ch_ClientCart.left(), ch_ClientShipping.left(),
+                new ClientState("1000"));
+        Choreography_Cart cart = new Choreography_Cart(ch_ClientCart.right(), ch_CartBilling.left(), cartState);
+        Choreography_Billing billing = new Choreography_Billing(ch_CartBilling.right(), ch_BillingShipping.left(),
+                new BillingState());
+        Choreography_Shipping shipping = new Choreography_Shipping(
+                ch_ClientShipping.right(), ch_BillingShipping.right(), new ShippingState());
 
         List<Runnable> services = List.of(
                 () -> client.placeOrder(),

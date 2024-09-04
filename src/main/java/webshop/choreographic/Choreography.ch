@@ -17,14 +17,16 @@ public class Choreography@(Client, Cart, Billing, Shipping) {
         SymChannel@(Client, Cart)<Object> ch_ClientCart,
         SymChannel@(Client, Shipping)<Object> ch_ClientShipping,
         SymChannel@(Cart, Billing)<Object> ch_CartBilling,
-        SymChannel@(Billing, Shipping)<Object> ch_BillingShipping
+        SymChannel@(Billing, Shipping)<Object> ch_BillingShipping,
+        ClientState@Client clientState,
+        CartState@Cart cartState,
+        BillingState@Billing billingState,
+        ShippingState@Shipping shippingState
     ) {
-        this.clientState = new ClientState@Client("user1"@Client);
-        this.cartState = new CartState@Cart();
-        this.billingState = new BillingState@Billing();
-        this.shippingState = new ShippingState@Shipping();
-
-        this.cartState.addItem("user1"@Cart, new CartItem@Cart("product1"@Cart, 1@Cart));
+        this.clientState = clientState;
+        this.cartState = cartState;
+        this.billingState = billingState;
+        this.shippingState = shippingState;
         
         this.ch_ClientCart = ch_ClientCart;
         this.ch_ClientShipping = ch_ClientShipping;

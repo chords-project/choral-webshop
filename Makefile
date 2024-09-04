@@ -12,13 +12,11 @@ check: $(CHORAL_SRCS)
 
 .PHONY: run-orchestrated
 run-orchestrated: $(JAVA_GEN_FILES)
-	mvn compile
-	java -cp target/classes webshop.orchestrated.Main
+	mvn compile exec:java -Dexec.mainClass="webshop.orchestrated.Main"
 
 .PHONY: run-choreographic
 run-choreographic: $(JAVA_GEN_FILES)
-	mvn compile
-	java -cp target/classes webshop.choreographic.Main
+	mvn compile exec:java -Dexec.mainClass="webshop.choreographic.Main"
 
 .PHONY: clean
 clean:
