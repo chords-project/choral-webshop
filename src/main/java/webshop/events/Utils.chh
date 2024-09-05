@@ -1,0 +1,5 @@
+package webshop.events;
+
+public class Utils@A {
+    public static <T@X> T@A cast(Object@A obj) {}
+}

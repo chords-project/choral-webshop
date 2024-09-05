@@ -1,0 +1,5 @@
+package webshop.events.channel;
+
+import choral.channels.SymChannel;
+
+public interface TypeSymChannel@(A, B)<T@X> extends SymChannel@(A, B)<T>, SymTypeSelectChannel@(A, B)<T> {}

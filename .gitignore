@@ -8,6 +8,10 @@ src/main/java/webshop/orchestrated/checkout/messages/*.java
 src/main/java/webshop/choreographic/*.java
 !src/main/java/webshop/choreographic/Main.java
 
+src/main/java/webshop/events/*.java
+!src/main/java/webshop/events/Main.java
+!src/main/java/webshop/events/Utils.java
+
 target/
 pom.xml.tag
 pom.xml.releaseBackup
