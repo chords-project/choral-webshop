@@ -35,9 +35,11 @@ public class EventHandler@(Client, Cart, Billing, Shipping) {
         this.shippingState = shippingState;
     }
 
-    void on(Event@Client event) {
+    EventResult@(Client, Cart, Billing, Shipping) on(Event@Client event) {
         switch (event.getCommand()) {
             case PLACE_ORDER -> {
+                System@Client.out.println("Client perform event: PLACE_ORDER"@Client);
+
                 // Client -> Cart -> Billing -> Shipping -> Client
                 EventPlaceOrder@Client ev_client = Utils@Client.<EventPlaceOrder>cast(event);
                 ev_client.addUserID(clientState.userID);
@@ -57,6 +59,8 @@ public class EventHandler@(Client, Cart, Billing, Shipping) {
                 clientState.showOrderSummary(result);
             }
             case ADD_ITEM -> {
+                System@Client.out.println("Client perform event: ADD_ITEM"@Client);
+
                 // client -> cart
                 EventAddItem@Client ev_client = Utils@Client.<EventAddItem>cast(event);
                 ev_client.addUserID(clientState.userID);
@@ -69,6 +73,19 @@ public class EventHandler@(Client, Cart, Billing, Shipping) {
                 EventAddItem@Billing ev_billing = ch_cartBilling.<EventAddItem>tselect(ev_cart);
                 EventAddItem@Shipping ev_shipping = ch_billingShipping.<EventAddItem>tselect(ev_billing);
             }
+            case TERMINATE -> {
+                System@Client.out.println("Client perform event: TERMINATE"@Client);
+
+                // Knowledge of choice
+                EventTerminate@Client ev_client = Utils@Client.<EventTerminate>cast(event);
+                EventTerminate@Cart ev_cart = ch_clientCart.<EventTerminate>tselect(ev_client);
+                EventTerminate@Billing ev_billing = ch_cartBilling.<EventTerminate>tselect(ev_cart);
+                EventTerminate@Shipping ev_shipping = ch_billingShipping.<EventTerminate>tselect(ev_billing);
+
+                return new EventResult@(Client, Cart, Billing, Shipping)(true@Client, true@Cart, true@Billing, true@Shipping);
+            }
         }
+
+        return new EventResult@(Client, Cart, Billing, Shipping)(false@Client, false@Cart, false@Billing, false@Shipping);
     }
 }

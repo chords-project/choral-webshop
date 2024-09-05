@@ -39,20 +39,24 @@ public class Main {
                 () -> {
                     eventHandler_client.on(new EventAddItem(new CartItem("product1", 1)));
                     eventHandler_client.on(new EventPlaceOrder());
+                    eventHandler_client.on(new EventTerminate());
                 },
                 () -> {
-                    while (true) {
-                        eventHandler_cart.on();
+                    EventResult_Cart result = new EventResult_Cart();
+                    while (!result.terminate_cart) {
+                        result = eventHandler_cart.on();
                     }
                 },
                 () -> {
-                    while (true) {
-                        eventHandler_billing.on();
+                    EventResult_Billing result = new EventResult_Billing();
+                    while (!result.terminate_billing) {
+                        result = eventHandler_billing.on();
                     }
                 },
                 () -> {
-                    while (true) {
-                        eventHandler_shipping.on();
+                    EventResult_Shipping result = new EventResult_Shipping();
+                    while (!result.terminate_shipping) {
+                        result = eventHandler_shipping.on();
                     }
                 });
 
