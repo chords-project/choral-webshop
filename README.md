@@ -52,3 +52,44 @@ Client -> Cart -> Billing -> Shipping -> Client
 ### [Events](./src/main/java/webshop/events/)
 
 This examples models the approach described in [this](https://arxiv.org/pdf/2303.03983) paper.
+
+This example is an extension of the Choreographic example, where instead of only having a single action (to place an order),
+this approach has multiple actions that can be run multiple times and in any order.
+The client dictates what event to run next and the other processes follow.
+
+The example has the following events.
+
+- `ADD_ITEM`: Adds an item to the shopping cart of the client
+- `PLACE_ORDER`: Buys and ships the items in the shopping cart
+- `TERMINATE`: Exists the event loop and terminates the program
+
+In order to implement knowledge-of-choice, the `@TypeSelectionMethod` annotation is used, which is not a part of the Choral standard library yet.
+Therefore, a custom [LocalTypeChannel](./src/main/java/webshop/events/channel/LocalTypeChannel.java) has been implemented which extends the `LocalChannel` implementation with a `tselect` method as described in the paper above.
+
+The main choreography is driven by the [EventHandler](./src/main/java/webshop/events/EventHandler.ch) in the `on(Event@Client event)` method.
+This method is set up to run in a loop in the [`Main`](./src/main/java/webshop/events/Main.java) driver class.
+
+An interesting note is that knowledge of choice could potentially be optimized in the `ADD_ITEM` event,
+since the `Billing` and `Shipping` processes simply loop and do nothing in this event, it would have the same effect as never being notified about the event.
+Being able to merge this, could be used as a pattern to only send messages to processes involved in the current event.
+
+```java
+void on(Event@Client event) {
+  switch (event.getCommand()) {
+    FIRST_EVENT -> {
+      ch_AB.select(FIRST_EVENT);
+      ch_BC.select(FIRST_EVENT);
+      ch_CD.select(FIRST_EVENT);
+      System@D.out.println("First event");
+    },
+    SECOND_EVENT -> {
+      ch_AB.select(SECOND_EVENT);
+      System@B.out.println("Second event");
+    }
+  }
+
+  on(Client.next_event());
+}
+```
+
+The example above lacks knowledge-of-choice in Choral, but there is no reason this could not run theoretically.
