@@ -1,0 +1,17 @@
+package webshop.common.models;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class CartState@A {
+    private HashMap@A<String, List<CartItem>> userItems;
+
+    public CartState() {}
+
+    public void addItem(String@A userID, CartItem@A item) {}
+
+    public Cart@A getUserCart(String@A userID) {}
+
+    public void emptyCart(String@A userID) {}
+}

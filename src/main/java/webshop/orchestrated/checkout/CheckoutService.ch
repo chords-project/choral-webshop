@@ -4,7 +4,7 @@ import java.util.List;
 
 import choral.channels.SymChannel;
 
-import webshop.orchestrated.cart.CartItem;
+import webshop.common.models.CartItem;
 import webshop.orchestrated.cart.CartService;
 import webshop.orchestrated.checkout.messages.CheckoutMessage;
 import webshop.orchestrated.checkout.messages.PlaceOrderReq;

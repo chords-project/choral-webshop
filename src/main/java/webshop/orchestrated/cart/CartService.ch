@@ -4,6 +4,9 @@ import choral.channels.SymChannel;
 
 import java.util.List;
 
+import webshop.common.models.Cart;
+import webshop.common.models.CartItem;
+import webshop.common.models.CartState;
 import webshop.orchestrated.cart.messages.CartMessage;
 import webshop.orchestrated.cart.messages.AddItemReq;
 import webshop.orchestrated.cart.messages.EmptyCartReq;
@@ -32,8 +35,8 @@ public class CartService@(Cart, Client) {
     public List@Client<CartItem> getCart(String@Client userID) {
         GetCartReq@Cart req = ch.<GetCartReq>com(new GetCartReq@Client(userID));
         
-        List@Cart<CartItem> userItems = this.state.getUserCart(req.userID());
-        GetCartRes@Client res = ch.<GetCartRes>com(new GetCartRes@Cart(req.userID(), userItems));
+        Cart@Cart userCart = this.state.getUserCart(req.userID());
+        GetCartRes@Client res = ch.<GetCartRes>com(new GetCartRes@Cart(req.userID(), userCart.items));
         
         return res.items();
     }

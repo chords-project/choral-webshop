@@ -2,6 +2,8 @@ package webshop.choreographic;
 
 import choral.channels.SymChannel;
 
+import webshop.common.models.*;
+
 public class Choreography@(Client, Cart, Billing, Shipping) {
     private ClientState@Client clientState;
     private CartState@Cart cartState;
@@ -46,9 +48,10 @@ public class Choreography@(Client, Cart, Billing, Shipping) {
         Order@Billing orderBilling = billingState.makeOrder(billingPlaceOrder.userID, billingPlaceOrder.cart);
 
         Order@Shipping orderShipping = ch_BillingShipping.<Order>com(orderBilling);
-        ShippedOrder@Shipping shippedOrder = shippingState.shipOrder(orderShipping);
+        String@Shipping address = shippingState.shipOrder(orderShipping);
+        orderShipping.addShippingAddress(address);
 
-        ShippedOrder@Client shippedOrderClient = ch_ClientShipping.<ShippedOrder>com(shippedOrder);
+        Order@Client shippedOrderClient = ch_ClientShipping.<Order>com(orderShipping);
         clientState.showOrderSummary(shippedOrderClient);
     }
 }

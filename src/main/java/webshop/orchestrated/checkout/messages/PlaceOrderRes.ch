@@ -1,7 +1,7 @@
 package webshop.orchestrated.checkout.messages;
 
 import java.util.List;
-import webshop.orchestrated.cart.CartItem;
+import webshop.common.models.CartItem;
 
 public class PlaceOrderRes@A implements CheckoutMessage@A {
     public final String@A orderID;

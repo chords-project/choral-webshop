@@ -1,7 +1,0 @@
-package webshop.events.channel;
-
-import choral.channels.DiChannel;
-
-public interface DiTypeSelectChannel@(A, B)<T@X> {
-    @TypeSelectionMethod public <S@X extends T@X> S@B tselect(S@A m);
-}

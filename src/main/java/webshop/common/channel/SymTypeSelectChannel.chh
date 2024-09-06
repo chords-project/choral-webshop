@@ -1,0 +1,6 @@
+package webshop.common.channel;
+
+import choral.channels.DiChannel;
+
+public interface SymTypeSelectChannel@(A, B)<T@X> extends DiTypeSelectChannel@(A, B)<T>, DiTypeSelectChannel@(B, A)<T> {
+}

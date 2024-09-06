@@ -1,6 +1,12 @@
 package webshop.events;
 
-import webshop.events.channel.TypeSymChannel;
+import webshop.common.channel.TypeSymChannel;
+import webshop.common.models.ClientState;
+import webshop.common.models.CartState;
+import webshop.common.models.BillingState;
+import webshop.common.models.ShippingState;
+import webshop.common.models.CartItem;
+import webshop.common.models.Order;
 
 public class EventHandler@(Client, Cart, Billing, Shipping) {
 
@@ -52,11 +58,11 @@ public class EventHandler@(Client, Cart, Billing, Shipping) {
                 ev_billing.addOrder(order);
 
                 EventPlaceOrder@Shipping ev_shipping = ch_billingShipping.<EventPlaceOrder>tselect(ev_billing);
-                String@Shipping shippingAddress = shippingState.shipOrder(ev_shipping.order);
-                ev_shipping.addShipment(shippingAddress);
+                String@Shipping address = shippingState.shipOrder(ev_shipping.order);
+                ev_shipping.addShipment(address);
 
                 EventPlaceOrder@Client result = ch_clientShipping.<EventPlaceOrder>tselect(ev_shipping);
-                clientState.showOrderSummary(result);
+                clientState.showOrderSummary(result.order);
             }
             case ADD_ITEM -> {
                 System@Client.out.println("Client perform event: ADD_ITEM"@Client);

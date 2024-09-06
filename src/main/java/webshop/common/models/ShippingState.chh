@@ -1,0 +1,7 @@
+package webshop.common.models;
+
+public class ShippingState@A {
+    public ShippingState() {}
+
+    public String@A shipOrder(Order@A order) {}
+}

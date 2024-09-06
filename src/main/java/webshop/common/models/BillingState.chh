@@ -1,0 +1,12 @@
+package webshop.common.models;
+
+import java.util.List;
+import java.util.ArrayList;
+
+public class BillingState@A {
+    public List@A<Order> orders;
+
+    public BillingState() {}
+
+    public Order@A makeOrder(String@A userID, Cart@A products) {}
+}

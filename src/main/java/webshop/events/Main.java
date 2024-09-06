@@ -2,7 +2,13 @@ package webshop.events;
 
 import choral.runtime.Media.MessageQueue;
 import choral.utils.Pair;
-import webshop.events.channel.LocalTypeChannel;
+import webshop.common.channel.LocalTypeChannel;
+import webshop.common.models.BillingState;
+import webshop.common.models.CartItem;
+import webshop.common.models.CartState;
+import webshop.common.models.ClientState;
+import webshop.common.models.ShippingState;
+
 import java.util.List;
 import java.lang.Runnable;
 

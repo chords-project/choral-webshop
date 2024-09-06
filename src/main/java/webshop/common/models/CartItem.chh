@@ -1,0 +1,8 @@
+package webshop.common.models;
+
+public final class CartItem@A {
+    public final String@A productID;
+    public final int@A quantity;
+
+    public CartItem(String@A productID, int@A quantity) {}
+}

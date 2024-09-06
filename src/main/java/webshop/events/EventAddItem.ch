@@ -1,5 +1,7 @@
 package webshop.events;
 
+import webshop.common.models.CartItem;
+
 public class EventAddItem@A extends Event@A {
     public String@A userID;
     public final CartItem@A item;

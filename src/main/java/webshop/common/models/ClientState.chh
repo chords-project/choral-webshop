@@ -1,0 +1,9 @@
+package webshop.common.models;
+
+public class ClientState@A {
+    public final String@A userID;
+
+    public ClientState(String@A userID) {}
+
+    public void showOrderSummary(Order@A order) {}
+}

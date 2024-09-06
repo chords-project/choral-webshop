@@ -1,16 +1,17 @@
 package webshop.events;
 
+import webshop.common.models.Cart;
+import webshop.common.models.Order;
+
 class EventPlaceOrder@A extends Event@A {
     public String@A userID;
     public Cart@A cart;
     public Order@A order;
-    public String@A shippingAddress;
 
     public EventPlaceOrder() {
         this.userID = null@A;
         this.cart = null@A;
         this.order = null@A;
-        this.shippingAddress = null@A;
     }
 
     public void addUserID(String@A userID) {
@@ -26,7 +27,7 @@ class EventPlaceOrder@A extends Event@A {
     }
 
     public void addShipment(String@A address) {
-        this.shippingAddress = address;
+        this.order.addShippingAddress(address);
     }
 
     public Command@A getCommand() {

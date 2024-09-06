@@ -1,5 +1,7 @@
 package webshop.choreographic;
 
+import webshop.common.models.Cart;
+
 public final class CartPlaceOrderReq@A {
     public final String@A userID;
     public final Cart@A cart;

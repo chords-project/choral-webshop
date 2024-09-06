@@ -1,0 +1,9 @@
+package java.util.concurrent;
+
+public class LinkedBlockingQueue@X<E@X> {
+    public LinkedBlockingQueue() {}
+
+    public void put(E@X e) {}
+
+    public E@X take() {}
+}

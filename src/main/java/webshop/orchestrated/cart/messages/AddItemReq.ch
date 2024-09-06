@@ -1,6 +1,6 @@
 package webshop.orchestrated.cart.messages;
 
-import webshop.orchestrated.cart.CartItem;
+import webshop.common.models.CartItem;
 
 public final class AddItemReq@A implements CartMessage@A {
     private final String@A userID;

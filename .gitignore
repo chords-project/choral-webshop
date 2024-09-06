@@ -12,6 +12,10 @@ src/main/java/webshop/events/*.java
 !src/main/java/webshop/events/Main.java
 !src/main/java/webshop/events/Utils.java
 
+src/main/java/webshop/loopback/*.java
+src/main/java/webshop/loopback/events/*.java
+!src/main/java/webshop/loopback/Main.java
+
 target/
 pom.xml.tag
 pom.xml.releaseBackup

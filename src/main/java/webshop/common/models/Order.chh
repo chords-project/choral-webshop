@@ -1,0 +1,12 @@
+package webshop.common.models;
+
+public final class Order@A {
+    public final String@A orderID;
+    public final String@A userID;
+    public final Cart@A products;
+    public String@A shippingAddress;
+
+    public Order(String@A orderID, String@A userID, Cart@A products) {}
+
+    public void addShippingAddress(String@A address) {}
+}

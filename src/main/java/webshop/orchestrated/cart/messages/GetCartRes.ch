@@ -1,7 +1,7 @@
 package webshop.orchestrated.cart.messages;
 
 import java.util.List;
-import webshop.orchestrated.cart.CartItem;
+import webshop.common.models.CartItem;
 
 public final class GetCartRes@A implements CartMessage@A {
     private final String@A userID;

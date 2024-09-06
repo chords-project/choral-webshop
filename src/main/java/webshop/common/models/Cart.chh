@@ -1,0 +1,9 @@
+package webshop.common.models;
+
+import java.util.List;
+
+public final class Cart@A {
+    public final List@A<CartItem> items;
+
+    public Cart(List@A<CartItem> items) {}
+}

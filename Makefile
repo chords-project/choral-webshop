@@ -23,6 +23,10 @@ run-choreographic: $(JAVA_GEN_FILES)
 run-events: $(JAVA_GEN_FILES)
 	mvn compile exec:java -Dexec.mainClass="webshop.events.Main"
 
+.PHONY: run-loopback
+run-loopback: $(JAVA_GEN_FILES)
+	mvn compile exec:java -Dexec.mainClass="webshop.loopback.Main"
+
 .PHONY: clean
 clean:
 	rm -rf $(patsubst %.ch,%.java,$(CHORAL_SRCS)) $(patsubst %.ch,%_*.java,$(CHORAL_SRCS)) 
@@ -35,6 +39,9 @@ src/main/java/webshop/orchestrated/%.java: src/main/java/webshop/orchestrated/%.
 
 src/main/java/webshop/events/%.java: src/main/java/webshop/events/%.ch
 	choral epp -s src/main/java/webshop/events -t src/main/java -l $(CHORAL_HEADERS) $(notdir $*)
+
+src/main/java/webshop/loopback/%.java: src/main/java/webshop/loopback/%.ch
+	choral epp -s src/main/java/webshop/loopback -t src/main/java -l $(CHORAL_HEADERS) $(notdir $*)
 
 src/main/java/webshop/channel/%.java: src/main/java/webshop/channel/%.ch
 	choral epp -s src/main/java/webshop/channel -t src/main/java -l $(CHORAL_HEADERS) $(notdir $*)
