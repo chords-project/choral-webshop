@@ -1,15 +1,13 @@
 package webshop.loopback.events;
 
-public class Events@(A, B)<T@X> {
+import java.util.concurrent.ExecutorService;
+
+public class Events@(Sender, Receiver)<T@X> {
     public Events() {}
 
-    public void run(ExecutorService@A executorA,
-                    ExecutorService@B executorB,
-                    EventHandler@(A, B)<T> eventHandlerA,
-                    EventHandler@(B, A)<T> eventHandlerB,
-                    LocalHandler@A localHandlerA,
-                    LocalHandler@B localHandlerB) {}
+    public void run(ExecutorService@Sender executorSender,
+                    ExecutorService@Receiver executorReceiver,
+                    EventHandler@(Sender, Receiver)<T> eventHandler) {}
 
-    EventQueue@A<T> queueA() {}
-    EventQueue@B<T> queueB() {}
+    public EventQueue@Sender<T> queue() { }
 }

@@ -14,6 +14,8 @@ src/main/java/webshop/events/*.java
 
 src/main/java/webshop/loopback/*.java
 src/main/java/webshop/loopback/events/*.java
+!src/main/java/webshop/loopback/events/Events_*.java
+!src/main/java/webshop/loopback/events/EventsImpl.java
 !src/main/java/webshop/loopback/Main.java
 
 target/

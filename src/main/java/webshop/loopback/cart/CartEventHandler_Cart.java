@@ -1,8 +1,8 @@
 package webshop.loopback.cart;
 
-import webshop.loopback.events.EventHandler_Receiver;
-import choral.lang.Unit;
 import webshop.common.channel.TypeSymChannel_B;
+import choral.lang.Unit;
+import webshop.loopback.events.EventHandler_Receiver;
 
 public class CartEventHandler_Cart implements EventHandler_Receiver < CartEvent > {
 	private TypeSymChannel_B < CartEvent > ch;
@@ -19,13 +19,13 @@ public class CartEventHandler_Cart implements EventHandler_Receiver < CartEvent 
 		{
 			switch( ch.< CartEvent >tselect( Unit.id ) ){
 				case CartEventAddItem ev_cart -> {
-					
+					System.out.println( "CART: Add item" );
 				}
 				case CartEventGetCart ev_cart -> {
-					
+					System.out.println( "CART: Get cart" );
 				}
 				case CartEventEmptyCart ev_cart -> {
-					
+					System.out.println( "CART: Empty cart" );
 				}
 				default -> {
 					throw new RuntimeException( "Received unexpected label from select operation" );
