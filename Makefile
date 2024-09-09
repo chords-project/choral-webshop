@@ -1,7 +1,7 @@
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
 CHORAL_SRCS = $(call rwildcard,src/main/java/webshop,*.ch)
-CHORAL_HEADERS = "headers:src/main/java"
+CHORAL_HEADERS = headers:src/main/java/webshop/common
 JAVA_GEN_FILES = $(patsubst %.ch,%.java,$(CHORAL_SRCS))
 
 .PHONY: all

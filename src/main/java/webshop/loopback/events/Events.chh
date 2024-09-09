@@ -1,0 +1,15 @@
+package webshop.loopback.events;
+
+public class Events@(A, B)<T@X> {
+    public Events() {}
+
+    public void run(ExecutorService@A executorA,
+                    ExecutorService@B executorB,
+                    EventHandler@(A, B)<T> eventHandlerA,
+                    EventHandler@(B, A)<T> eventHandlerB,
+                    LocalHandler@A localHandlerA,
+                    LocalHandler@B localHandlerB) {}
+
+    EventQueue@A<T> queueA() {}
+    EventQueue@B<T> queueB() {}
+}

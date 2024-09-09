@@ -1,4 +1,4 @@
-package webshop.events;
+package webshop.common;
 
 public class Utils {
     @SuppressWarnings("unchecked")
