@@ -4,7 +4,7 @@ import scala.util.Random;
 
 public class Flow {
     public static enum Action {
-        PLACE_ORDER
+        PLACE_ORDER, ADD_ITEM
     }
 
     public final Action action;

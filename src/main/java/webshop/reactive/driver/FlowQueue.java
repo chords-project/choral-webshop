@@ -71,7 +71,7 @@ public class FlowQueue {
     private void enqueueSend(FlowMessage<Object> msg) {
         if (!this.sendQueue.containsKey(msg.flow)) {
             this.sendQueue.put(msg.flow, new LinkedList<>());
-            // this.recvQueue.put(msg.flow, new LinkedList<>());
+            this.recvQueue.put(msg.flow, new LinkedList<>());
         }
 
         this.sendQueue.get(msg.flow).add(msg.message);
@@ -80,7 +80,7 @@ public class FlowQueue {
     private void enqueueRecv(Flow flow, CompletableFuture<Object> future) {
         if (!this.recvQueue.containsKey(flow)) {
             this.recvQueue.put(flow, new LinkedList<>());
-            // this.sendQueue.put(flow, new LinkedList<>());
+            this.sendQueue.put(flow, new LinkedList<>());
         }
 
         this.recvQueue.get(flow).add(future);

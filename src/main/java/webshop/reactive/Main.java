@@ -1,6 +1,7 @@
 package webshop.reactive;
 
 import webshop.common.models.BillingState;
+import webshop.common.models.CartItem;
 import webshop.common.models.CartState;
 import webshop.common.models.ClientState;
 import webshop.common.models.Order;
@@ -42,16 +43,24 @@ public class Main {
         });
 
         ClientState clientState = new ClientState("user1000");
-        Flow initialFlow = Flow.generateFlow(Action.PLACE_ORDER);
-
-        // Client kicks off the first event
-        FlowPlaceOrder_Client clientPlaceOrder = new FlowPlaceOrder_Client(
-                clientState,
-                new FlowChannel_A(initialFlow, queue_cart),
-                new FlowChannel_B(initialFlow, queue_client));
 
         executor.execute(() -> {
+            // Client kicks off the events
+            Flow addItemFlow = Flow.generateFlow(Action.ADD_ITEM);
+            FlowAddItem_Client clientAddItem = new FlowAddItem_Client(clientState,
+                    new FlowChannel_A(addItemFlow, queue_cart));
+            clientAddItem.addItem(new CartItem("sunglasses", 1));
+
+            System.out.println("\nClient added item, now place order\n");
+
+            // Place order after adding item
+            Flow placeOrderFlow = Flow.generateFlow(Action.PLACE_ORDER);
+            FlowPlaceOrder_Client clientPlaceOrder = new FlowPlaceOrder_Client(
+                    clientState,
+                    new FlowChannel_A(placeOrderFlow, queue_cart),
+                    new FlowChannel_B(placeOrderFlow, queue_client));
             Order result = clientPlaceOrder.placeOrder();
+
             System.out.println("CLIENT RESULT: " + result.orderID);
             executor.shutdown();
         });
@@ -74,6 +83,10 @@ public class Main {
                             new FlowChannel_B(flow, queue_cart), new FlowChannel_A(flow, queue_billing));
 
                     executor.execute(cartPlaceOrder::placeOrder);
+                    break;
+                case ADD_ITEM:
+                    FlowAddItem_Cart cartAddItem = new FlowAddItem_Cart(cartState, new FlowChannel_B(flow, queue_cart));
+                    executor.execute(cartAddItem::addItem);
                     break;
                 default:
                     throw new RuntimeException("Unknown flow action");
