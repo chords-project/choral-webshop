@@ -1,8 +1,8 @@
 package webshop.loopback.cart;
 
 import webshop.common.channel.TypeSymChannel_A;
-import webshop.loopback.events.EventHandler_Sender;
 import webshop.common.Utils;
+import webshop.loopback.events.EventHandler_Sender;
 
 public class CartEventHandler_Sender implements EventHandler_Sender < CartEvent > {
 	private TypeSymChannel_A < CartEvent > ch;

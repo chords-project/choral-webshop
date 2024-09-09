@@ -1,0 +1,10 @@
+package webshop.common.models;
+
+import java.util.List;
+
+public final class UserCart@A {
+    public final String@A userID;
+    public final Cart@A cart;
+
+    public UserCart(String@A userID, Cart@A cart) {}
+}

@@ -18,6 +18,9 @@ src/main/java/webshop/loopback/events/*.java
 !src/main/java/webshop/loopback/events/EventsImpl.java
 !src/main/java/webshop/loopback/Main.java
 
+src/main/java/webshop/reactive/*.java
+!src/main/java/webshop/reactive/Main.java
+
 target/
 pom.xml.tag
 pom.xml.releaseBackup

@@ -1,0 +1,106 @@
+package webshop.reactive;
+
+import webshop.common.models.BillingState;
+import webshop.common.models.CartState;
+import webshop.common.models.ClientState;
+import webshop.common.models.Order;
+import webshop.reactive.driver.Flow;
+import webshop.reactive.driver.FlowChannel_A;
+import webshop.reactive.driver.FlowChannel_B;
+import webshop.reactive.driver.FlowQueue;
+import webshop.reactive.driver.Flow.Action;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+public class Main {
+
+    public static void main(String[] args) throws InterruptedException {
+        System.out.println("Reactive spawn example");
+
+        ExecutorService executor = Executors.newCachedThreadPool();
+        FlowQueue queue_client = new FlowQueue();
+        FlowQueue queue_cart = new FlowQueue();
+        FlowQueue queue_billing = new FlowQueue();
+
+        runCart(executor, queue_client, queue_cart, queue_billing);
+        runBilling(executor, queue_client, queue_cart, queue_billing);
+        runClient(executor, queue_client, queue_cart, queue_billing);
+
+        executor.awaitTermination(1, TimeUnit.DAYS);
+    }
+
+    static void runClient(
+            ExecutorService executor,
+            FlowQueue queue_client,
+            FlowQueue queue_cart,
+            FlowQueue queue_billing) {
+
+        queue_client.onNewFlowReceived(flow -> {
+            System.out.println("DRIVER: New flow received on Client queue: " + flow.action + "(" + flow.id + ")");
+        });
+
+        ClientState clientState = new ClientState("user1000");
+        Flow initialFlow = Flow.generateFlow(Action.PLACE_ORDER);
+
+        // Client kicks off the first event
+        FlowPlaceOrder_Client clientPlaceOrder = new FlowPlaceOrder_Client(
+                clientState,
+                new FlowChannel_A(initialFlow, queue_cart),
+                new FlowChannel_B(initialFlow, queue_client));
+
+        executor.execute(() -> {
+            Order result = clientPlaceOrder.placeOrder();
+            System.out.println("CLIENT RESULT: " + result.orderID);
+            executor.shutdown();
+        });
+    }
+
+    static void runCart(
+            ExecutorService executor,
+            FlowQueue queue_client,
+            FlowQueue queue_cart,
+            FlowQueue queue_billing) {
+
+        CartState cartState = new CartState();
+
+        queue_cart.onNewFlowReceived(flow -> {
+            System.out.println("DRIVER: New flow received on Cart queue: " + flow.action + "(" + flow.id + ")");
+
+            switch (flow.action) {
+                case PLACE_ORDER:
+                    FlowPlaceOrder_Cart cartPlaceOrder = new FlowPlaceOrder_Cart(cartState,
+                            new FlowChannel_B(flow, queue_cart), new FlowChannel_A(flow, queue_billing));
+
+                    executor.execute(cartPlaceOrder::placeOrder);
+                    break;
+                default:
+                    throw new RuntimeException("Unknown flow action");
+            }
+        });
+    }
+
+    static void runBilling(
+            ExecutorService executor,
+            FlowQueue queue_client,
+            FlowQueue queue_cart,
+            FlowQueue queue_billing) {
+
+        BillingState billingState = new BillingState();
+
+        queue_billing.onNewFlowReceived(flow -> {
+            System.out.println("DRIVER: New flow received on Billing queue: " + flow.action + "(" + flow.id + ")");
+
+            switch (flow.action) {
+                case PLACE_ORDER:
+                    FlowPlaceOrder_Billing billingPlaceOrder = new FlowPlaceOrder_Billing(billingState,
+                            new FlowChannel_B(flow, queue_billing), new FlowChannel_A(flow, queue_client));
+                    executor.execute(billingPlaceOrder::placeOrder);
+                    break;
+                default:
+                    throw new RuntimeException("Unknown flow action");
+            }
+        });
+    }
+}

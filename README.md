@@ -93,3 +93,8 @@ void on(Event@Client event) {
 ```
 
 The example above lacks knowledge-of-choice in Choral, but there is no reason this could not run theoretically.
+
+### [Loopback](./src/main/java/webshop/loopback)
+
+An attempt to model requests between two services as an event loop.
+More closely related to the IRC paper than the Events example is.
