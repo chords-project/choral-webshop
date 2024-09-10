@@ -5,26 +5,26 @@ import java.util.concurrent.ExecutionException;
 import choral.channels.DiChannel_B;
 import choral.lang.Unit;
 
-public class FlowChannel_B implements DiChannel_B<Object> {
-    private final Flow flow;
-    private final FlowQueue queue;
+public class ReactiveChannel_B<Action> implements DiChannel_B<Object> {
+    private final IntegrityKey<Action> key;
+    private final ReactiveQueue<Action> queue;
 
-    public FlowChannel_B(Flow flow, FlowQueue queue) {
-        this.flow = flow;
+    public ReactiveChannel_B(IntegrityKey<Action> key, ReactiveQueue<Action> queue) {
+        this.key = key;
         this.queue = queue;
     }
 
     @Override
     public <S> S com() {
         try {
-            return queue.<S>recv(flow);
+            return queue.<S>recv(key);
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public <S> S com(Unit arg0) {
+    public <S> S com(Unit unit) {
         return com();
     }
 
@@ -34,7 +34,7 @@ public class FlowChannel_B implements DiChannel_B<Object> {
     }
 
     @Override
-    public <T extends Enum<T>> T select(Unit arg0) {
+    public <T extends Enum<T>> T select(Unit unit) {
         return select();
     }
 

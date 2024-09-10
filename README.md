@@ -98,3 +98,60 @@ The example above lacks knowledge-of-choice in Choral, but there is no reason th
 
 An attempt to model requests between two services as an event loop.
 More closely related to the IRC paper than the Events example is.
+
+Only a single event loop from client to cart has been modeled,
+but this shows the general design.
+
+This approach uses a lot of extra code, and the benefits from choreographies are nearly lost,
+since most events consists of a single message passing,
+which could just as well have been made without choreographies.
+
+### [Reactive](./src/main/java/webshop/reactive)
+
+#### Background discussion
+
+I think the most natural place to split a microservice project like this into different choreographies, is by modeling each request flow as its own choreography.
+I.e. authenticate, add item to cart, place order, etc. would each be its own choreography involving the relevant roles needed to perform that action.
+
+Making it reactive, I imagine that the first message received by each choreography could kick-start the choreography for that service.
+That way services can sit idle until they receive the first message in the request flow where after the choreography to handle that request is started.
+If another request flow is received - e.g. by another client - then a new choreography is spawned to handle that request concurrently.
+
+Similar to Ozone, integrity keys could be associated with each request flow, in order to know which request flow a message is a part of.
+That means, if a new integrity key is received, start a new choreography,
+and if a previously seen key is received, continue the execution of the associated choreography.
+
+##### Place order example
+
+```
+(1) Client -> (2) Cart -> (3) Billing -> (4) Cart
+```
+
+- The request flow is started by the Client, e.g. when the user clicks the button to place the order.
+- The Client sends the first message in the choreography to the Cart, when Cart receives the message the choreography is started at the Cart role.
+- The Cart now sends the next message to the Billing role, wherefrom the Billing choreography is started.
+- Lastly, Billing sends a message back to Client with the result, but since this message is a part of the same choreography, the Client will simply continue the flow of the existing choreography instead of starting a new one.
+
+#### Introduction
+
+This example extends the [Choreographic](#choreographic) example by making it reactive.
+The main idea is to "spawn" the projected choreography in a new thread when the first message is received.
+In order to do this, an [integrity key](./src/main/java/webshop/reactive/driver/IntegrityKey.java) is send along with each message.
+The recipient can then use this key to determine which running choreography is the intended recipient.
+If no choreography is actively running for the given key, a new choreography is started to handle it.
+
+The example consists of two choreographies, [`FlowAddItem`](./src/main/java/webshop/reactive/FlowAddItem.ch) and [`FlowPlaceOrder`](./src/main/java/webshop/reactive/FlowPlaceOrder.ch).
+Each choreography is very simple to understand and only uses `DiChannel`s for communication.
+
+The choreographies are made reactive by the [driver library](./src/main/java/webshop/reactive/driver/) written purely in Java.
+The library consists of a custom reactive channel, that implements the `DiChannel` interface,
+as well as a custom reactive queue, used by the channel implementation.
+
+#### Putting everything together
+
+Everything is combined in the [Main](./src/main/java/webshop/reactive/Main.java) class.
+A new queue is created for each role, and each role registers the `onNewFlowReceived` callback on it.
+This callback is called every time a message is received with a not previously seen integrity key for the given queue.
+In this callback the integrity key is used to determine which choreography to spawn.
+The correct choreography is instantiated with the same integrity key for its channels.
+Lastly, the choreography is executed in a new thread where it will immediately receive the message.
